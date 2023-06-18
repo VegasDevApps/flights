@@ -13,11 +13,14 @@ import { FlightService } from '../api/services';
 })
 export class BookFlightResolver implements Resolve<FlightRm> {
 
-  constructor(private flightService: FlightService, private router: Router){}
+  constructor(
+    private flightService: FlightService, 
+    private router: Router){}
 
   resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<FlightRm> {
+    
     const id = route.paramMap.get('flightId');
-
+    
     if(id === null) {
       this.router.navigate(['/not-found']);
       return EMPTY;

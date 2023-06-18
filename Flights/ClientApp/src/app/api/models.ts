@@ -1,3 +1,4 @@
+export { BookDto } from './models/book-dto';
 export { FlightRm } from './models/flight-rm';
 export { NewPassengerDto } from './models/new-passenger-dto';
 export { ProblemDetails } from './models/problem-details';

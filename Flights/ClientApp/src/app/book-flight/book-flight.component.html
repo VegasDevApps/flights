@@ -1,4 +1,4 @@
-<h5 class="text-md-center m-5">Book Flight</h5>
+<h5   class="text-md-center m-5">Book Flight</h5>
 
 <div class="card-body text-center" style="padding: 20px; background-color:#e5ecf26e">
   <h6 class="card-title ">{{flight.airline}}</h6>
@@ -70,16 +70,28 @@
 
 <div class="card-footer d-flex justify-content-center">
 
-  <label class="form-label mt-5" for="numberOfSeats">Number of Seats</label>
-  <div class="center input-group">
-
-    <input type="number" class="form-control" id="numberOfSeats" name="numberOfSeats"
-           placeholder="Number of Seats" />
-    <button type="submit" class="btn btn-primary">
-      <i class="fas fa-ticket"></i>
-      Book
-    </button>
+  <form [formGroup]="form" (ngSubmit)="book()">
+    <label class="form-label mt-5" for="numberOfSeats">Number of Seats</label>
+    <div class="center input-group">
+  
+      <input formControlName="number" type="number" class="form-control" id="numberOfSeats" name="numberOfSeats"
+             placeholder="Number of Seats" />
+      <button type="submit" class="btn btn-primary">
+        <i class="fas fa-ticket"></i>
+        Book
+      </button>
+    </div>
+    <br>
+  </form>
+</div>
+<div *ngIf="number.invalid && (number.dirty || number.touched)" class="invalid-feedback d-block">
+  <div class="" *ngIf="number.errors?.['required']">
+    How many people do you wnat to book the flight for?
   </div>
-  <br>
-
+  <div class="" *ngIf="number.errors?.['min']">
+    You cannot book for less then 1 passenger!
+  </div>
+  <div class="" *ngIf="number.errors?.['max']">
+    Our planes do not have more than 254 seats.
+  </div>
 </div>
