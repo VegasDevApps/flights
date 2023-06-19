@@ -44,10 +44,17 @@ export class BookFlightComponent implements OnInit {
   // }
 
   private handleError(err: any){
+    let bRedirect = true;
+    if(err.status === 409) {
+      console.log("error: " + err);
+      alert(JSON.parse(err.error).message);
+      bRedirect = false;
+    }
     console.log("Response Error. Status: ", err.status);
     console.log("Response Error. Status Text: ", err.statusText);
     console.log(err);
-    this.router.navigate(['/search-flights']);
+    if(bRedirect)
+      this.router.navigate(['/search-flights']);
   }
 
    book(){
