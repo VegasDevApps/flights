@@ -41,5 +41,16 @@ namespace Flights.Domain.Entities
             flight.RemainingNumberOfSeats -= booking.NumberOfSeats;
             return null;
         }
+
+        public object? CancelBooking(string passengerEmail, byte numberOfSeats){
+            var booking = Bookings
+                .FirstOrDefault(b => b.PassengerEmail == passengerEmail.ToLower() 
+                    && b.NumberOfSeats == numberOfSeats);
+            if(booking == null) return new NotFoundError();
+
+            Bookings.Remove(booking);
+            RemainingNumberOfSeats += numberOfSeats;
+            return null;
+        }
     }
 }

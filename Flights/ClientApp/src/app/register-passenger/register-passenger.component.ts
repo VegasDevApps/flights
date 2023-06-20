@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PassengerService } from '../api/services';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
 import { Router } from '@angular/router';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-register-passenger',
   templateUrl: './register-passenger.component.html',
   styleUrls: ['./register-passenger.component.css']
 })
-export class RegisterPassengerComponent {
+export class RegisterPassengerComponent implements OnInit {
 
   constructor(
     private passengerService: PassengerService,
@@ -17,6 +18,10 @@ export class RegisterPassengerComponent {
     private authService: AuthService,
     private router: Router
   ){}
+
+  ngOnInit(){
+    
+  }
 
   form = this.fb.group({
     email: ['', Validators.compose([Validators.required, Validators.email, Validators.min(10), Validators.max(100)])],

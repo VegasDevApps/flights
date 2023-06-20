@@ -27,10 +27,11 @@
           >
             <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
           </li>
-          <li
-            class="nav-item"
-          >
+          <li *ngIf="!(authService.currentUser$ | async)" class="nav-item">
             <a class="nav-link text-dark" [routerLink]="['register-passenger']">Register</a>
+          </li>
+          <li *ngIf="authService.currentUser$ | async" class="nav-item">
+            <a class="nav-link text-dark" [routerLink]="['my-booking']">My Bookings</a>
           </li>
         </ul>
       </div>
