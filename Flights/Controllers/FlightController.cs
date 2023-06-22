@@ -42,9 +42,30 @@ public class FlightController : ControllerBase
     [ProducesResponseType(400)]
     [ProducesResponseType(500)]
     [ProducesResponseType(typeof(IEnumerable<FlightRm>), 200)]
-    public IEnumerable<FlightRm> Search()
+    public IEnumerable<FlightRm> Search([FromQuery] FlightSearchParameters @params)
     {
-        return _entities.Flights.Select(f => FlightToRecord(f));
+        var flights = _entities.Flights.AsQueryable();
+        
+        if(!string.IsNullOrWhiteSpace(@params.Destination))
+            flights = flights.Where(f => f.Arrival.Place.ToLower().Contains(@params.Destination.ToLower()));
+        
+        if(!string.IsNullOrWhiteSpace(@params.From))
+            flights = flights.Where(f => f.Departure.Place.ToLower().Contains(@params.From.ToLower()));
+        
+        if(@params.FromDate != null)
+            flights = flights.Where(f => f.Departure.Time >= @params.FromDate.Value.Date);
+        
+        if(@params.ToDate != null)
+            flights = flights.Where(f => f.Departure.Time >= @params.ToDate.Value.Date.AddDays(1).AddTicks(-1));
+        
+        if(@params.NumberOfPassengers != null && @params.NumberOfPassengers != 0)
+            flights = flights.Where(f => f.RemainingNumberOfSeats >= @params.NumberOfPassengers);
+        else    
+            flights = flights.Where(f => f.RemainingNumberOfSeats >= 1);
+
+
+
+        return flights.Select(f => FlightToRecord(f));
     }
 
     [HttpPost]
@@ -73,7 +94,7 @@ public class FlightController : ControllerBase
         return CreatedAtAction(nameof(Find), new { id = dto.FlightId });
     }
 
-    private FlightRm FlightToRecord(Flight flight)
+    static FlightRm FlightToRecord(Flight flight)
     {
         return new FlightRm(
             flight.Id,

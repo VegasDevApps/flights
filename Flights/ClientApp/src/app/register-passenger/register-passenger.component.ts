@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { PassengerService } from '../api/services';
 import { FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../auth/auth.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { take } from 'rxjs';
 
 @Component({
@@ -16,11 +16,14 @@ export class RegisterPassengerComponent implements OnInit {
     private passengerService: PassengerService,
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ){}
 
+  requestedUrl?: string = undefined;
+
   ngOnInit(){
-    
+    this.activatedRoute.params.subscribe(p => this.requestedUrl = p['requestedUrl']);
   }
 
   form = this.fb.group({
@@ -70,7 +73,7 @@ export class RegisterPassengerComponent implements OnInit {
 
   private login(email: string){
     this.authService.loginUser({ email });
-    this.router.navigate(['/search-flights']);
+    this.router.navigate([ this.requestedUrl ?? '/search-flights']);
   }
 }
  

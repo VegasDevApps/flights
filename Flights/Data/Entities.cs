@@ -5,8 +5,10 @@ namespace Flights.Data
 {
     public class Entities : DbContext
     {
-        public DbSet<Passenger> Passengers => Set<Passenger>();
-        public DbSet<Flight> Flights => Set<Flight>();
+        //public DbSet<Passenger> Passengers => Set<Passenger>();
+        public DbSet<Passenger> Passengers { get; set; }
+        //public DbSet<Flight> Flights => Set<Flight>();
+        public DbSet<Flight> Flights { get; set; }
         
         public Entities(DbContextOptions<Entities> options) : base(options)
         {
@@ -21,6 +23,7 @@ namespace Flights.Data
 
             modelBuilder.Entity<Flight>().OwnsOne(f => f.Departure);
             modelBuilder.Entity<Flight>().OwnsOne(f => f.Arrival);
+            modelBuilder.Entity<Flight>().OwnsMany(f => f.Bookings);
         }
     }
 }
